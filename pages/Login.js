@@ -21,6 +21,17 @@ export default function Login({navigation}) {
             <Text style={styles.buttontext}>LOGIN</Text>
           </View>
         </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+          <View style={styles.buttonextra}>
+            <Text style={styles.buttonextratext}>Log in with Azure AD</Text>
+          </View>
+        </TouchableOpacity>
+
+        <Image 
+          style={styles.image3}
+          source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Windows_logo_-_2012.svg/1200px-Windows_logo_-_2012.svg.png'}}
+        />
         
         <Text style={styles.extratext}>Don't have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
@@ -41,13 +52,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    marginTop: '8%',
+    marginTop: '15%',
     color: '#62F97A',
     fontWeight: '800',
     fontSize: '48px',
   },
   input: {
-    marginTop: '20%',
+    marginTop: '15%',
     backgroundColor: '#3E3E3E',
     width: '90%',
     height: '10%',
@@ -82,18 +93,39 @@ const styles = StyleSheet.create({
     marginTop: '-17%',
     marginLeft: '-68%'
   },
+  image3: {
+    width: 40,
+    height: 40,
+    marginTop: '-13.5%',
+    marginLeft: '-67%'
+  },
   button: {
     backgroundColor: '#62F97A',
-    marginTop: '13%',
-    borderRadius: 40
+    marginTop: '12%',
+    borderRadius: 20
+  },
+  buttonextra: {
+    backgroundColor: '#3778bf',
+    marginTop: '6%',
+    borderRadius: 15
   },
   buttontext: {
-    paddingLeft: '32%',
-    paddingRight: '32%',
+    paddingLeft: '35.5%',
+    paddingRight: '35.5%',
     paddingBottom: '5%',
     paddingTop: '5%',
     fontSize: '25',
     fontWeight: '800',
+    marginBottom: '0%',
+  },
+  buttonextratext: {
+    color: 'white',
+    paddingLeft: '25%',
+    paddingRight: '9%',
+    paddingBottom: '5%',
+    paddingTop: '5%',
+    fontSize: '24',
+    fontWeight: '700',
     marginBottom: '0%',
   },
   button2: {
@@ -110,8 +142,8 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   extratext: {
-    marginTop: '15%',
-    marginBottom: '-5%',
+    marginTop: '14%',
+    marginBottom: '-6%',
     color: 'white',
     paddingBottom: '5%',
     paddingTop: '5%',
