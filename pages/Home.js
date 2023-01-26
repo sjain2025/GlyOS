@@ -1,7 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Image } from 'react-native';
+import { auth } from '../firebase'
 
 export default function Home({navigation}) {
+
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Login")
+      })
+      .catch(error => alert(error.message))
+  }
+  
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -25,7 +36,7 @@ export default function Home({navigation}) {
             <Text style={styles.buttontext2}>Record Results</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <TouchableOpacity onPress={handleSignOut}>
           <View style={styles.button3}>
             <Text style={styles.buttontext3}>Log Out</Text>
           </View>

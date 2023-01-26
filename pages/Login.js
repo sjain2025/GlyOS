@@ -1,22 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { auth } from '../firebase';
 
 export default function Login({navigation}) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigation.replace("Home")
+      }
+    })
+
+    return unsubscribe
+  }, [])
+
+  const handleLogin = () => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(userCredentials => {
+        const user = userCredentials.user;
+      })
+      .catch(error => {
+        if (error.message === "Firebase: Error (auth/missing-email).") {
+          alert("Email address is required")
+        } else if (error.message === "Firebase: An internal AuthError has occurred. (auth/internal-error).") {
+          alert("Password is required")
+        } else if (error.message === "Firebase: The email address is badly formatted. (auth/invalid-email).") {
+          alert("Email address is not formatted correctly")
+        } else if (error.message === "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).") {
+          alert("User login is invalid")
+        } else if (error.message === "FirebaseError: Firebase: The password is invalid or the user does not have a password. (auth/wrong-password).") {
+          alert("User login is invalid")
+        } else {
+          alert("Invalid login")
+        }
+      })
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <Text style={styles.title}>GlyceTrack</Text>
-        <TextInput style={styles.input} placeholder="    Enter Email Address" placeholderTextColor={'#bfbfbf'} underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" required></TextInput>
+        <Text style={styles.title}>GlyOS</Text>
+        <TextInput value={email} onChangeText={text => setEmail(text)} style={styles.input} placeholder="    Enter Email Address" placeholderTextColor={'#bfbfbf'} underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" required></TextInput>
         <Image 
           style={styles.image}
           source={{ uri: 'https://cdn-icons-png.flaticon.com/512/666/666162.png'}}
         />
-        <TextInput style={styles.input2} placeholder="    Enter Password" placeholderTextColor={'#bfbfbf'} secureTextEntry='true' underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" required></TextInput>
+        <TextInput value={password} onChangeText={text => setPassword(text)} style={styles.input2} placeholder="    Enter Password" placeholderTextColor={'#bfbfbf'} secureTextEntry='true' underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" required></TextInput>
         <Image 
           style={styles.image2}
           source={{ uri: 'https://cdn-icons-png.flaticon.com/512/61/61457.png'}}
         />
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+        <TouchableOpacity onPress={handleLogin}>
           <View style={styles.button}>
             <Text style={styles.buttontext}>LOGIN</Text>
           </View>
@@ -120,8 +157,8 @@ const styles = StyleSheet.create({
   },
   buttonextratext: {
     color: 'white',
-    paddingLeft: '25%',
-    paddingRight: '9%',
+    paddingLeft: '22%',
+    paddingRight: '6%',
     paddingBottom: '5%',
     paddingTop: '5%',
     fontSize: '24',

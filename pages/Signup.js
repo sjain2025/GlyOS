@@ -1,28 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { auth } from '../firebase';
 
 export default function Signup({navigation}) {
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [repeatPassword, setRepeatPassword] = useState('')
+
+  const handleSignUp = ({navigation}) => {
+    if (password !== repeatPassword) {
+      alert("Passwords do not match");
+    } else {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+          const user = userCredentials.user;
+          navigation.replace("Home");
+        })
+        .catch(error => {
+          if (!(error.message === "undefined is not an object (evaluating 'navigation.replace')" || error.message === "TypeError: undefined is not an object (evaluating 'navigation.replace')")) {
+            alert("Enter a valid email and password. Ensure that password match before registering a new account.")
+          }
+        })
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <Text style={styles.title}>Create Account</Text>
-        <TextInput style={styles.input} placeholder="    Enter Email Address" placeholderTextColor={'#bfbfbf'} underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" required></TextInput>
+        <TextInput value={email} onChangeText={text => setEmail(text)} style={styles.input} placeholder="    Enter Email Address" placeholderTextColor={'#bfbfbf'} underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" required></TextInput>
         <Image 
           style={styles.image}
           source={{ uri: 'https://cdn-icons-png.flaticon.com/512/666/666162.png'}}
         />
-        <TextInput style={styles.input} placeholder="    Enter Password" placeholderTextColor={'#bfbfbf'} underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" secureTextEntry='true' required></TextInput>
+        <TextInput value={password} onChangeText={text => setPassword(text)} style={styles.input} placeholder="    Enter Password" placeholderTextColor={'#bfbfbf'} underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" secureTextEntry='true' required></TextInput>
         <Image 
           style={styles.image}
           source={{ uri: 'https://cdn-icons-png.flaticon.com/512/61/61457.png'}}
         />
-        <TextInput style={styles.input} placeholder="    Repeat Password" placeholderTextColor={'#bfbfbf'} underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" secureTextEntry='true' required></TextInput>
+        <TextInput value={repeatPassword} onChangeText={text => setRepeatPassword(text)} style={styles.input} placeholder="    Repeat Password" placeholderTextColor={'#bfbfbf'} underlineColorAndroid="transparent" spellCheck="false" autoCorrect="false" autoCapitalize="none" secureTextEntry='true' required></TextInput>
         <Image 
           style={styles.image}
           source={{ uri: 'https://cdn-icons-png.flaticon.com/512/61/61457.png'}}
         />
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+        <TouchableOpacity onPress={handleSignUp}>
           <View style={styles.button}>
             <Text style={styles.buttontext}>REGISTER</Text>
           </View>
